@@ -14,7 +14,6 @@ router.get('/chart-kunjungan', dashboardController.getKunjunganChart);
 //pasien
 router.post('/pasien', adminController.createPasien);
 router.get('/pasien', adminController.getAllPasien);
-router.get('/all-pasien', adminController.getListPasien);
 router.get('/pasien/:id', adminController.getPasienById);
 router.put('/pasien/:id', adminController.editPasien);
 
