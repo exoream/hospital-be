@@ -8,12 +8,10 @@ const adminRoutes = require('./routes/admin/adminRoutes');
 const pasienRoutes = require('./routes/pasien/pasienRoutes');
 
 const app = express();
-app.use(
-  cors({
-    origin: "https://hospital-web-gilt-beta.vercel.app",
-    credentials: true,
-  })
-);
+app.use(cors({
+    origin: 'http://localhost:3001',
+    credentials: true
+}));
 
 app.use(express.json());
 
