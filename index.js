@@ -25,9 +25,9 @@ app.use('/api/admin', authenticate, authorizeRole(['admin']), adminRoutes);
 app.use('/api/pasien', authenticate, authorizeRole(['admin', 'pasien']), pasienRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+  res.send('Hello World!');
 });
 
 app.listen(3000, () => {
-    console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });
