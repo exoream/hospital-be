@@ -153,27 +153,6 @@ exports.getAllPasien = async (limit, offset, search, page) => {
     }
 };
 
-exports.getListPasien = async () => {
-    try {
-        const [result] = await db.query(`
-            SELECT 
-                users.id,
-                pasiens.nik,
-                pasiens.nama_lengkap
-            FROM users 
-            INNER JOIN pasiens ON users.id = pasiens.user_id
-            ORDER BY users.created_at DESC
-        `);
-
-        return {
-            data: result
-        };
-    } catch (error) {
-        throw new ResponseError(500, 'Gagal mengambil data pasien: ' + error.message);
-    }
-};
-
-
 
 exports.getPasienById = async (id) => {
     try {
