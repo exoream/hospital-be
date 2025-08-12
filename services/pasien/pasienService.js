@@ -2,23 +2,42 @@ const db = require('../../config/db');
 const { ResponseError } = require('../../utils/response');
 
 exports.createRiwayat = async (userId, data) => {
+    try {
+        const { alamat, keluhan } = data || {};
 
-    const { alamat, keluhan } = data;
+        const hasKeluhan = keluhan && String(keluhan).trim().length > 0;
+        const hasAlamat = alamat && String(alamat).trim().length > 0;
 
-    if (!alamat || !keluhan) {
-        throw new ResponseError(400, 'alamat and keluhan are required');
+        if (!hasKeluhan && !hasAlamat) {
+            throw new ResponseError(400, 'Keluhan dan alamat wajib diisi');
+        }
+        if (!hasKeluhan) {
+            throw new ResponseError(400, 'Keluhan wajib diisi');
+        }
+        if (!hasAlamat) {
+            throw new ResponseError(400, 'Alamat wajib diisi');
+        }
+
+        // Simpan ke DB (trim input sebelum simpan)
+        const [result] = await db.query(
+            'INSERT INTO riwayat_pasien (pasien_id, keluhan, alamat) VALUES (?, ?, ?)',
+            [userId, String(keluhan).trim(), String(alamat).trim()]
+        );
+
+        return {
+            id: result.insertId,
+            user_id: userId,
+            alamat: String(alamat).trim(),
+            keluhan: String(keluhan).trim(),
+        };
+    } catch (err) {
+        // Jika sudah ResponseError, lempar lagi agar controller bisa tangani sesuai status
+        if (err instanceof ResponseError) throw err;
+
+        // Error lain -> bungkus jadi ResponseError 500
+        throw new ResponseError(500, 'Gagal menyimpan riwayat: ' + (err.message || 'Internal server error'));
     }
-
-    const [result] = await db.query('INSERT INTO riwayat_pasien (pasien_id, keluhan, alamat) VALUES (?, ?, ?)',
-        [userId, keluhan, alamat]
-    );
-    return {
-        id: result.insertId,
-        user_id: userId,
-        alamat: alamat,
-        keluhan: keluhan
-    };
-}
+};
 
 exports.getAllRiwayat = async (userId, limit, offset, search = '') => {
     try {
