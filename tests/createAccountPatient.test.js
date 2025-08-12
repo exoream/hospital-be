@@ -16,7 +16,7 @@ beforeAll(async () => {
     adminToken = jwt.sign(
         {
             id: 1,
-            username: 'admin',
+            username: 'testuser_admin',
             role: 'admin'
         },
         process.env.JWT_SECRET || 'secret',
